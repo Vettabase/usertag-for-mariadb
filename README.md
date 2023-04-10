@@ -46,6 +46,12 @@ If you use the MariaDB CLI, you can do it in this way:
 mariadb < usertag.sql
 ```
 
+Or, with MariaDB versions older than 10.4:
+
+```
+mysql < usertag.sql
+```
+
 
 ## Usage
 
