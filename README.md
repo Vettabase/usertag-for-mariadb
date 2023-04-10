@@ -36,6 +36,17 @@ contacts for users, it might be convenient to use tags like these:
  - `contact.im.skype`
 
 
+## Install
+
+To install usertag, just run the `usertag.sql` file on the MariaDB server.
+
+If you use the MariaDB CLI, you can do it in this way:
+
+```
+mariadb < usertag.sql
+```
+
+
 ## Usage
 
 Refer to the `tutorial.sql` file for a practical explanaiton by example.
