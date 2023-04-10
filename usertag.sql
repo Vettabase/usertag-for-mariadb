@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS usertag (
     tag_type VARCHAR(20) NOT NULL,
     tag VARCHAR(64) NOT NULL,
     value TEXT NOT NULL,
-    CONSTRAINT chk_username_not_emptu
+    CONSTRAINT chk_username_not_empty
         CHECK (username > ''),
     CONSTRAINT chk_tag_not_empty
         CHECK (tag > ''),
