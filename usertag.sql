@@ -232,7 +232,7 @@ BEGIN
         WHERE username = i_username_old
     ;
     IF ROW_COUNT() = 0 THEN
-        CALL raise_exception(31000, CONCAT_WS('', 'User ', i_username, ' does not exist or has no usertags'));
+        CALL raise_exception(31000, CONCAT_WS('', 'User ', i_username_old, ' does not exist or has no usertags'));
     END IF;
 END ||
 
