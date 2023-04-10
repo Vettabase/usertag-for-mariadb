@@ -35,6 +35,8 @@ CREATE TABLE IF NOT EXISTS usertag (
     tag_type VARCHAR(20) NOT NULL,
     tag VARCHAR(64) NOT NULL,
     value TEXT NOT NULL,
+    CONSTRAINT chk_tag_dot
+        CHECK (tag NOT LIKE '.%' AND tag NOT LIKE '%.'),
     PRIMARY KEY (username, tag),
     INDEX idx_tag (tag)
 )
@@ -142,6 +144,9 @@ BEGIN
     END IF;
     IF i_tag IS NULL THEN
         CALL raise_exception(31000, 'A tag cannot have a NULL name');
+    END IF;
+    IF i_tag LIKE '.%' OR i_tag LIKE '%.' THEN
+        CALL raise_exception(31000, 'A tag cannot start or end with a dot');
     END IF;
     IF i_value IS NULL THEN
         CALL raise_exception(31000, 'A tag cannot have a NULL value. If you want to delete it, use usertag_unset()');
