@@ -35,6 +35,10 @@ CREATE TABLE IF NOT EXISTS usertag (
     tag_type VARCHAR(20) NOT NULL,
     tag VARCHAR(64) NOT NULL,
     value TEXT NOT NULL,
+    CONSTRAINT chk_username_not_emptu
+        CHECK (username > ''),
+    CONSTRAINT chk_tag_not_empty
+        CHECK (tag > ''),
     CONSTRAINT chk_tag_dot
         CHECK (tag NOT LIKE '.%' AND tag NOT LIKE '%.'),
     PRIMARY KEY (username, tag),
@@ -139,11 +143,11 @@ CREATE
         MODIFIES SQL DATA
         COMMENT 'Set a value for a user/tag'
 BEGIN
-    IF i_username IS NULL THEN
-        CALL raise_exception(31000, 'A tag cannot be associated to a NULL user');
+    IF i_username IS NULL OR i_username = '' THEN
+        CALL raise_exception(31000, 'A tag cannot be associated to a zero-length or NULL username');
     END IF;
-    IF i_tag IS NULL THEN
-        CALL raise_exception(31000, 'A tag cannot have a NULL name');
+    IF i_tag IS NULL OR i_tag = '' THEN
+        CALL raise_exception(31000, 'A tag cannot have an empty or NULL name');
     END IF;
     IF i_tag LIKE '.%' OR i_tag LIKE '%.' THEN
         CALL raise_exception(31000, 'A tag cannot start or end with a dot');
