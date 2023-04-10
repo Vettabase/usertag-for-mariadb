@@ -43,13 +43,13 @@ To install usertag, just run the `usertag.sql` file on the MariaDB server.
 If you use the MariaDB CLI, you can do it in this way:
 
 ```
-mariadb < usertag.sql
+mariadb -c < usertag.sql
 ```
 
 Or, with MariaDB versions older than 10.4:
 
 ```
-mysql < usertag.sql
+mysql -c < usertag.sql
 ```
 
 
