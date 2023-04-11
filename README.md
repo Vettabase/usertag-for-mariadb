@@ -66,6 +66,9 @@ Or, with MariaDB versions older than 10.4:
 mysql -c -A < usertag.sql
 ```
 
+If you use any other tool to install this library, it is your responsibility to
+remove the DELIMITER statement if necessary.
+
 
 ## Usage
 
