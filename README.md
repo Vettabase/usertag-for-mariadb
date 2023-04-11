@@ -36,6 +36,20 @@ contacts for users, it might be convenient to use tags like these:
  - `contact.im.skype`
 
 
+## Requirements
+
+usertag has been tested on:
+
+ - MariaDB 10.11 LTS
+ - MariaDB 10.6 LTS
+ - Percona Server 8.0
+ - MySQL 8.0
+
+No plugins required.
+
+No configuration requirements.
+
+
 ## Install
 
 To install usertag, just run the `usertag.sql` file on the MariaDB server.
