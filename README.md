@@ -11,11 +11,11 @@ MariaDB does not support comments for users and roles.
 If in the future MariaDB will support comments for users and roles, it will probably
 do it in a non-standard, dangerous way. While most other DBMSs support the [COMMENT ON
 statement](https://sql-bits.com/comments-on-database-objects/),
-MariaDB and MySQL support a COMMENT clause for some CREATE and ALTER statements.
-Using ALTER statements to change a comment is potentially risky.
+MariaDB and MySQL support a `COMMENT` clause for some `CREATE` and `ALTER` statements.
+Using `ALTER` statements to change a comment is potentially risky.
 
 While MySQL has a [COMMENT clause](https://sql-bits.com/mariadb-mysql-comments-on-database-objects/)
-for CREATE USER and ALTER USER, it also has an ATTRIBUTE clause which accepts a JSON document. This allows to insert semi-structured information. While this can potentially be
+for `CREATE USER` and `ALTER USER`, it also has an `ATTRIBUTE` clause which accepts a JSON document. This allows to insert semi-structured information. While this can potentially be
 useful when attributes are handled by programs, for humans it is difficult to read
 and modify manually JSON documents. This can easily lead to mistakes.
 
@@ -67,7 +67,7 @@ mysql -c -A < usertag.sql
 ```
 
 If you use any other tool to install this library, it is your responsibility to
-remove the DELIMITER statement if necessary.
+remove the `DELIMITER` statement if necessary.
 
 
 ## Usage
