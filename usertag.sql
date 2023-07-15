@@ -271,23 +271,23 @@ DELIMITER ;
 
 CALL usertag_set('vettabase', 'comment', 'Locked user (cannot login) that is used as a DEFINER for routines and views in the vettabase database.');
 
-CREATE ROLE IF NOT EXISTS admin;
+CREATE ROLE IF NOT EXISTS usertag_admin;
 GRANT SELECT ON vettabase.orphan_usertag
-    TO admin;
+    TO usertag_admin;
 GRANT EXECUTE ON PROCEDURE vettabase.usertag_get
-    TO admin;
+    TO usertag_admin;
 GRANT EXECUTE ON PROCEDURE vettabase.usertag_get_all
-    TO admin;
+    TO usertag_admin;
 GRANT EXECUTE ON PROCEDURE vettabase.usertag_set
-    TO admin;
+    TO usertag_admin;
 GRANT EXECUTE ON PROCEDURE vettabase.usertag_unset
-    TO admin;
+    TO usertag_admin;
 GRANT EXECUTE ON PROCEDURE vettabase.usertag_unset_for_user
-    TO admin;
+    TO usertag_admin;
 GRANT EXECUTE ON PROCEDURE vettabase.usertag_rename_user
-    TO admin;
+    TO usertag_admin;
 GRANT EXECUTE ON PROCEDURE vettabase.user_find_by_tag
-    TO admin;
+    TO usertag_admin;
 
-CALL usertag_set('admin', 'comment', 'Role that allow users to use the usertag library, by Vettabase.');
+CALL usertag_set('usertag_admin', 'comment', 'Role that allow users to use the usertag library, by Vettabase.');
 
