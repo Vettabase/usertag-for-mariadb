@@ -401,7 +401,10 @@ CREATE
         READS SQL DATA
         COMMENT 'List all tags and their definitions'
 BEGIN
-    CALL usertag_find_by_definition('%');
+    SELECT tag, definition
+        FROM usertag_definition
+        ORDER BY tag
+    ;
 END ||
 
 DELIMITER ;
