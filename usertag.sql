@@ -416,6 +416,15 @@ GRANT EXECUTE ON PROCEDURE vettabase.usertag_rename_user
 GRANT EXECUTE ON PROCEDURE vettabase.user_find_by_tag
     TO usertag_admin;
 
+GRANT EXECUTE ON PROCEDURE vettabase.usertag_definition_set
+    TO usertag_admin;
+GRANT EXECUTE ON PROCEDURE vettabase.usertag_definition_unset
+    TO usertag_admin;
+GRANT EXECUTE ON PROCEDURE vettabase.usertag_definition_get
+    TO usertag_admin;
+GRANT EXECUTE ON PROCEDURE vettabase.usertag_find_by_definition
+    TO usertag_admin;
+
 CALL usertag_definition_set('comment', 'Free-form notes about the user/role');
 CALL usertag_set('usertag_admin', 'comment', 'Role that allow users to use the usertag library, by Vettabase.');
 
