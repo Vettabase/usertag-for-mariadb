@@ -64,3 +64,37 @@ SELECT * FROM orphan_usertag;
 
 -- To remove all tags from an active or dropped user:
 CALL usertag_unset_for_user('eliza');
+
+-- Set definition for a tag
+CALL usertag_definition_set('contact.email', 'User email');
+-- Get definitions
+-- Should return nothing
+CALL usertag_definition_get('contact');
+-- Should return "contact.email" definition
+CALL usertag_definition_get('contact.email');
+CALL usertag_definition_set('contact', 'User contacts for normal communications');
+CALL usertag_definition_set('contact.emergency', 'User emergency contacts');
+-- Should return "contact" definition
+CALL usertag_definition_get('contact');
+-- Should return "contact.emergency" definition
+CALL usertag_definition_get('contact.emergency');
+-- Should return "contact.emergency" definition
+CALL usertag_definition_get('contact.emergency.phone');
+CALL usertag_definition_set('contact.emergency.phone', 'User phone to use in case of emergency');
+-- Should return "contact" definition
+CALL usertag_definition_get('contact');
+-- Should return "contact.emergency" definition
+CALL usertag_definition_get('contact.emergency');
+-- Should return "contact.emergency.phone" definition
+CALL usertag_definition_get('contact.emergency.phone');
+-- Should return nothing
+CALL usertag_definition_get('contacts');
+
+-- Unset a definition and verify that it's been unset
+CALL usertag_definition_unset('contact.emergency.phone');
+CALL usertag_definition_get('contact.emergency.phone');
+
+-- List all tags and definitions
+CALL usertag_find_by_definition('%');
+-- List all tags whose definition contains "contact"
+CALL usertag_find_by_definition('%contact%');

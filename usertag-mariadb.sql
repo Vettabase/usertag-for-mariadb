@@ -30,3 +30,18 @@ ALTER TABLE usertag
     )
 ;
 
+
+ALTER TABLE usertag_definition
+      ADD COLUMN valid_since TIMESTAMP(6) GENERATED ALWAYS AS ROW START INVISIBLE
+    , ADD COLUMN valid_until TIMESTAMP(6) GENERATED ALWAYS AS ROW END INVISIBLE
+    , ADD PERIOD FOR SYSTEM_TIME(valid_since, valid_until)
+    , ADD SYSTEM VERSIONING
+;
+
+ALTER TABLE usertag_definition
+    PARTITION BY SYSTEM_TIME (
+            PARTITION p_history HISTORY
+          , PARTITION p_current CURRENT
+    )
+;
+

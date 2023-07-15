@@ -48,6 +48,21 @@ CREATE TABLE IF NOT EXISTS usertag (
     COMMENT 'Usertags are stored here, but this tables should not be used directly'
 ;
 
+CREATE TABLE IF NOT EXISTS usertag_definition (
+    tag VARCHAR(64) NOT NULL,
+    definition TEXT NOT NULL,
+    CONSTRAINT chk_tag
+        CHECK (tag > ''),
+    CONSTRAINT chk_definition
+        CHECK (definition > ''),
+    CONSTRAINT chk_tag_dot
+        CHECK (tag NOT LIKE '.%' AND tag NOT LIKE '%.'),
+    PRIMARY KEY (tag)
+)
+    DEFAULT COLLATE ascii_bin,
+    COMMENT 'Usertags definitions, by where a definition applies to a tag and its children'
+;
+
 CREATE OR REPLACE
     DEFINER = vettabase@'127.0.0.1'
     SQL SECURITY DEFINER
@@ -266,6 +281,118 @@ BEGIN
     ;
 END ||
 
+
+-- DEFINITIONS
+-- ===========
+
+
+CREATE
+    DEFINER = vettabase@'127.0.0.1'
+    PROCEDURE usertag_definition_set(
+        IN i_tag VARCHAR(64),
+        IN i_definition TEXT
+    )
+        SQL SECURITY DEFINER
+        NOT DETERMINISTIC
+        MODIFIES SQL DATA
+        COMMENT 'Set the definition for the specified tag. It might also be returned for children that do not have a definition'
+BEGIN
+    IF i_tag IS NULL OR i_tag = '' THEN
+        CALL raise_exception(31000, 'The tag name cannot be empty or NULL');
+    END IF;
+    IF i_tag LIKE '%.' THEN
+        CALL raise_exception(31000, 'The tag name cannot end with a dot');
+    END IF;
+
+    IF i_tag IS NULL OR i_definition = '' THEN
+        CALL raise_exception(31000, 'The definition cannot be empty or NULL');
+    END IF;
+    INSERT INTO usertag_definition
+            (tag, definition)
+        VALUES
+            (i_tag, i_definition)
+        ON DUPLICATE KEY UPDATE definition = i_definition
+    ;
+END ||
+
+CREATE
+    DEFINER = vettabase@'127.0.0.1'
+    PROCEDURE usertag_definition_unset(
+        IN i_tag VARCHAR(64)
+    )
+        SQL SECURITY DEFINER
+        NOT DETERMINISTIC
+        MODIFIES SQL DATA
+        COMMENT 'Set the definition for the specified tag. It might also be returned for children that do not have a definition'
+BEGIN
+    IF i_tag IS NULL OR i_tag = '' THEN
+        CALL raise_exception(31000, 'The tag name cannot be empty or NULL');
+    END IF;
+
+    DELETE FROM usertag_definition
+        WHERE tag = i_tag
+    ;
+
+    IF ROW_COUNT() = 0 THEN
+        CALL raise_exception(31000, CONCAT_WS('', 'Tag definition for ', i_tag, ' does not exist'));
+    END IF;
+END ||
+
+CREATE
+    DEFINER = vettabase@'127.0.0.1'
+    PROCEDURE usertag_definition_get(
+        IN i_tag VARCHAR(64)
+    )
+        SQL SECURITY DEFINER
+        NOT DETERMINISTIC
+        MODIFIES SQL DATA
+        COMMENT 'Get the definition for the specified tag or the closest parent'
+BEGIN
+    DECLARE v_definition TEXT DEFAULT NULL;
+
+    IF i_tag IS NULL OR i_tag = '' THEN
+        CALL raise_exception(31000, 'The tag name cannot be empty or NULL');
+    END IF;
+    IF i_tag LIKE '%.' THEN
+        CALL raise_exception(31000, 'The tag name cannot end with a dot');
+    END IF;
+
+    SET v_definition := (
+        SELECT definition
+            FROM usertag_definition
+            WHERE tag = i_tag
+    );
+    IF v_definition IS NOT NULL THEN
+        SELECT i_tag AS tag, v_definition AS definition;
+    ELSE
+        SELECT tag AS `closest_parent`, definition
+            FROM usertag_definition
+            WHERE i_tag LIKE CONCAT_WS('', tag, '.%')
+            ORDER BY CHAR_LENGTH(tag) DESC
+            LIMIT 1
+        ;
+    END IF;
+END ||
+
+CREATE
+    DEFINER = vettabase@'127.0.0.1'
+    PROCEDURE usertag_find_by_definition(
+        IN i_pattern VARCHAR(64)
+    )
+        SQL SECURITY DEFINER
+        NOT DETERMINISTIC
+        READS SQL DATA
+        COMMENT 'Get the tags and their definitions based on specified LIKE pattern'
+BEGIN
+    IF i_pattern IS NULL OR i_pattern = '' THEN
+        CALL raise_exception(31000, 'Pattern cannot be empty or NULL. To see all tags and definitions, specify \'%\'');
+    END IF;
+    SELECT tag, definition
+        FROM usertag_definition
+        WHERE definition LIKE i_pattern
+    ;
+END ||
+
 DELIMITER ;
 
 
@@ -289,5 +416,6 @@ GRANT EXECUTE ON PROCEDURE vettabase.usertag_rename_user
 GRANT EXECUTE ON PROCEDURE vettabase.user_find_by_tag
     TO usertag_admin;
 
+CALL usertag_definition_set('comment', 'Free-form notes about the user/role');
 CALL usertag_set('usertag_admin', 'comment', 'Role that allow users to use the usertag library, by Vettabase.');
 
