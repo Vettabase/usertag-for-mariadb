@@ -345,7 +345,7 @@ CREATE
     )
         SQL SECURITY DEFINER
         NOT DETERMINISTIC
-        MODIFIES SQL DATA
+        READS SQL DATA
         COMMENT 'Get the definition for the specified tag or the closest parent'
 BEGIN
     DECLARE v_definition TEXT DEFAULT NULL;
