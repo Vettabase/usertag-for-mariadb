@@ -323,7 +323,7 @@ CREATE
         SQL SECURITY DEFINER
         NOT DETERMINISTIC
         MODIFIES SQL DATA
-        COMMENT 'Set the definition for the specified tag. It might also be returned for children that do not have a definition'
+        COMMENT 'Unset the definition for the specified tag'
 BEGIN
     IF i_tag IS NULL OR i_tag = '' THEN
         CALL raise_exception(31000, 'The tag name cannot be empty or NULL');
@@ -399,7 +399,7 @@ CREATE
         SQL SECURITY DEFINER
         NOT DETERMINISTIC
         READS SQL DATA
-        COMMENT 'Get tags for the specified user. LIKE patterns are used for users and tags'
+        COMMENT 'List all tags and their definitions'
 BEGIN
     CALL usertag_find_by_definition('%');
 END ||
