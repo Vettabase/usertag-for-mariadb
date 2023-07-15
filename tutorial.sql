@@ -94,7 +94,9 @@ CALL usertag_definition_get('contacts');
 CALL usertag_definition_unset('contact.emergency.phone');
 CALL usertag_definition_get('contact.emergency.phone');
 
--- List all tags and definitions
-CALL usertag_find_by_definition('%');
 -- List all tags whose definition contains "contact"
 CALL usertag_find_by_definition('%contact%');
+-- List all tags and definitions
+CALL usertag_find_by_definition('%');
+-- List all tags and definitions
+CALL usertag_definition_get_all();

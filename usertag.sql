@@ -393,6 +393,17 @@ BEGIN
     ;
 END ||
 
+CREATE
+    DEFINER = vettabase@'127.0.0.1'
+    PROCEDURE usertag_definition_get_all()
+        SQL SECURITY DEFINER
+        NOT DETERMINISTIC
+        READS SQL DATA
+        COMMENT 'Get tags for the specified user. LIKE patterns are used for users and tags'
+BEGIN
+    CALL usertag_find_by_definition('%');
+END ||
+
 DELIMITER ;
 
 
