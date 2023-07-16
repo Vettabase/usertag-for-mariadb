@@ -44,4 +44,3 @@ ALTER TABLE usertag_definition
           , PARTITION p_current CURRENT
     )
 ;
-

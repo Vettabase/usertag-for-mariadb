@@ -441,4 +441,3 @@ GRANT EXECUTE ON PROCEDURE vettabase.usertag_find_by_definition
 
 CALL usertag_definition_set('comment', 'Free-form notes about the user/role');
 CALL usertag_set('usertag_admin', 'comment', 'Role that allow users to use the usertag library, by Vettabase.');
-
