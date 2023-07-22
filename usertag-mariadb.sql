@@ -75,4 +75,31 @@ BEGIN
     ;
 END ||
 
+
+CREATE
+    DEFINER = vettabase@'127.0.0.1'
+    PROCEDURE usertag_hist_definition_get(
+        IN i_tag VARCHAR(64)
+    )
+        SQL SECURITY DEFINER
+        NOT DETERMINISTIC
+        READS SQL DATA
+        COMMENT 'Get the definition history for the specified tag'
+BEGIN
+    DECLARE v_definition TEXT DEFAULT NULL;
+
+    IF i_tag IS NULL OR i_tag = '' THEN
+        CALL raise_exception(31000, 'The tag name cannot be empty or NULL');
+    END IF;
+    IF i_tag LIKE '%.' THEN
+        CALL raise_exception(31000, 'The tag name cannot end with a dot');
+    END IF;
+
+    SELECT i_tag AS tag, definition, valid_since, valid_until
+        FROM usertag_definition FOR SYSTEM_TIME ALL
+        WHERE tag = i_tag
+        ORDER BY valid_since
+    ;
+END ||
+
 DELIMITER ;
