@@ -100,3 +100,8 @@ CALL usertag_find_by_definition('%contact%');
 CALL usertag_find_by_definition('%');
 -- List all tags and definitions
 CALL usertag_definition_get_all();
+
+-- See the history of value changes for user 'john', tag 'contact.email'
+CALL usertag_hist_get('john', 'contact.email');
+-- See the history of definitions for the contact.email tag
+CALL usertag_hist_definition_get('contact.email')
