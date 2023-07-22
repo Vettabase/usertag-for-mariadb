@@ -14,6 +14,9 @@
 -- but not on Percona Server or MySQL.
 
 
+USE usertag;
+
+
 -- Make all usertag tables system-versioned
 
 ALTER TABLE usertag
