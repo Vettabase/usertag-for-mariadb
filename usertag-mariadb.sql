@@ -44,3 +44,32 @@ ALTER TABLE usertag_definition
           , PARTITION p_current CURRENT
     )
 ;
+
+
+DELIMITER ||
+
+CREATE
+    DEFINER = vettabase@'127.0.0.1'
+    PROCEDURE usertag_hist_get(
+        IN i_username VARCHAR(64),
+        IN i_tag VARCHAR(64)
+    )
+        SQL SECURITY DEFINER
+        NOT DETERMINISTIC
+        READS SQL DATA
+        COMMENT 'Get tags for the specified user and their history. LIKE patterns are used for users and tags'
+BEGIN
+    SET i_username := to_like_pattern(i_username);
+    SET i_tag := to_like_pattern(i_tag);
+
+    SELECT username, tag, value, valid_since, valid_until
+        FROM usertag FOR SYSTEM_TIME ALL
+        WHERE
+            username LIKE i_username
+            AND tag LIKE i_tag
+            AND tag_type = 'SCALAR'
+        ORDER BY 1, 2, 4
+    ;
+END ||
+
+DELIMITER ;
